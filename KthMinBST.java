@@ -54,3 +54,64 @@ public class Solution
 
     }
 }
+
+/* using Morris Traversal */
+/*
+    Time complexity: O(N)
+    Space complexity: O(1)
+    
+    Where 'N' is number of nodes in binary serach tree.
+*/
+
+
+
+public class Solution {
+	private static int morrisTraversal(TreeNode<Integer> root, int k) {
+		TreeNode<Integer> curNode = root;
+
+		while (curNode != null) {
+			if (curNode.left == null) {
+				k = k - 1;
+
+				// If 'curNode' is 'k-th' smallest node
+				if (k == 0) {
+					return curNode.data;
+				}
+				curNode = curNode.right;
+			} else {
+				TreeNode<Integer> prev = curNode.left;
+
+				// Find rightmost child node of 'curNode'
+				while (prev.right != null && prev.right != curNode) {
+					prev = prev.right;
+				}
+
+				// If rightmost node is leaf node then
+				// Make a connection between rightmost node and 'curNode'
+				if (prev.right == null) {
+					prev.right = curNode;
+					curNode = curNode.left;
+				}
+
+				else {
+					prev.right = null;
+					k = k - 1;
+					if (k == 0) {
+						// If 'curNode' is 'k-th' smallest node
+						return (curNode.data);
+					}
+					curNode = curNode.right;
+				}
+			}
+		}
+
+		// If number of nodes less than 'k'
+		return -1;
+	}
+
+	public static int kthSmallest(TreeNode<Integer> root, int k) {
+		// Find 'k-th' smallest node with help of morris traversal
+		return morrisTraversal(root, k);
+	}
+}
+
